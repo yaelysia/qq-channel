@@ -1,0 +1,7 @@
+.ci-work/
+evidence/
+*.obj
+*.exp
+*.lib
+*.dll
+*.node
