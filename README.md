@@ -28,3 +28,10 @@
 **CI PASS 只说明当前固定 Node 22 ABI 中的停止状态适配与 DLL 导出表成立。** 它不能替代 Demiurge Windows 主机上的真实 QQ Native Session 初始化、扫码、私聊收发、锁屏继续通信和进程正常清理测试。
 
 实验参考 Node.js v22.11.0 官方源码、NapCat/Napuketto 的公开启动事实与 QQ Native Mirror 的技术分析；此仓库的源码和适配均自行编写，未包含 NapCat 限制性源码或第三方私有 Native Stub。
+
+## GitHub Actions 启动诊断（2026-10-30）
+
+- [Windows 原生构建 #41017311554](https://github.com/yaelysia/qq-channel/actions/runs/41017311554)：失败，但 **Runner 名称为空、0 个 Step、无原生编译日志**，未运行任何构建脚本。
+- [Linux/Windows 极简 Runner Smoke #41017573794](https://github.com/yaelysia/qq-channel/actions/runs/41017573794)：两个平台均在约 3 秒内失败，**无 Runner、无 Step**；不依赖 checkout、Node、C++ 或下载，因此表明阻碍位于 GitHub 任务调度／仓库账户配置层，而非本仓库源码。
+- 当前尚无有效 Actions 原生 ABI 编译结果，**不要将 GitHub 的红色 Job 误当作 C++ 编译失败**；具体是否为私有仓库用量/付费限制或其他账户设置，需在 GitHub Actions 运行页面查看平台的错误说明。
+- GitHub 修复 Runner 分配后，优先重新执行原生 Windows 工作流并核验真实 `false → true` 证据，再考虑传回 Demiurge 本机工作树进行 QQNT 集成验证。请不要自行修改账号凭据或提交 QQ 二进制。
