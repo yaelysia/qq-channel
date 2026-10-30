@@ -47,3 +47,13 @@
 - 下一阶段必须使用这个经验证的 DLL 回到 Demiurge 的隔离 Windows A1b worktree 测试原版 QQ 9.9.36 的 Wrapper 登录、MessageService、锁屏，CI 不能替代该真实环境测试。
 
 注意：ABI 通过不等于完整的 Node/QQNT 长期正常退出或网络稳定性得到验证。CI 不会自动部署或合并任何内容。
+
+## Host Node 26.7.0 精确 ABI 实验
+
+Demiurge Windows Host 分发包使用 **Node.js 26.7.0**，本分支针对这一精确版本验证 QQNT 兼容层，不修改此前 Node22 的已通过基线。
+
+- 使用 Windows MSVC，以官方 Node 26.7.0 源码、node.exe、node.lib 为依据，校验 SHA-256 后构建自研 QQNT.dll。
+- 本机 QQ 9.9.36-53644 的 wrapper.node 所需 99 个符号，Node26 与 Node22 同样仅缺 qq_magic_napi_register 和 IsEnvironmentStopping。
+- 通过真实 Node26 子进程检验空 isolate、停止前、node::Stop 后的内部标志及退出结果。
+- **绝不上传原版 QQ 客户端二进制、QQ 账号、聊天内容或凭据。** CI PASS 不能替代本机 QQ 会话实测。
+- 成功后正式 QQ Channel 可以与 Host 复用同一份 Node26 runtime，而无需额外捆绑 Node22。

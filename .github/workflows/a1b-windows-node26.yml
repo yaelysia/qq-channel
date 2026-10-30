@@ -1,0 +1,53 @@
+name: A1b Windows Node 26 stopping-state
+on:
+  push:
+    branches:
+      - experiment/a1b-host-node26
+    paths:
+      - .github/workflows/a1b-windows-node22.yml
+      - ci/**
+      - src/**
+      - abi/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: a1b-node26
+  cancel-in-progress: true
+
+jobs:
+  native-stopping:
+    runs-on: windows-2022
+    timeout-minutes: 18
+    steps:
+      - name: Checkout experiment
+        uses: actions/checkout@v4
+
+      - name: Bootstrap Node 26
+        uses: actions/setup-node@v4
+        with:
+          node-version: '26.7.0'
+          check-latest: false
+
+      - name: Download and verify official Node release
+        shell: pwsh
+        run: ./ci/prepare-node26.ps1
+
+      - name: Build exact-ABI shim and verify real Node stop transition
+        shell: cmd
+        run: call ci\build-with-vs26.cmd
+
+      - name: Upload experimental diagnostics and shim
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a1b-node26-native-stop
+          if-no-files-found: warn
+          retention-days: 14
+          path: |
+            evidence/**
+            .ci-work/build/QQNT.dll
+            .ci-work/build/verify-stopping.node
+            .ci-work/source/node-v26.7.0/LICENSE
