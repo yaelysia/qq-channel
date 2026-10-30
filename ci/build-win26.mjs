@@ -113,6 +113,7 @@ const args=[
   '/EHsc','/MD','/O2','/Gy','/Gw','/DNOMINMAX',
   '/D_ITERATOR_DEBUG_LEVEL=0','/DBUILDING_NODE_EXTENSION=1',
   '/DHAVE_INSPECTOR=1','/DHAVE_OPENSSL=1','/DNODE_USE_V8_PLATFORM=1',
+  '/DHAVE_SQLITE='+(cfg.vars.node_use_sqlite ? '1' : '0'),
   ...(cfg.vars.node_use_amaro?['/DHAVE_AMARO=1']:[]),
   ...(cfg.vars.v8_enable_pointer_compression?['/DV8_COMPRESS_POINTERS']:[]),
   ...(cfg.vars.v8_enable_sandbox?['/DV8_ENABLE_SANDBOX']:[]),
