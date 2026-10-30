@@ -1,5 +1,7 @@
 // Pinned Node v22.11.0 internal ABI adapter; never use with other runtimes.
-// This deliberately reads Node's real Environment::is_stopping() atomic flag.
+// Use the official exported node::GetCurrentEnvironment() API instead of
+// the inlined Environment::GetCurrent() to avoid linking Node's private
+// ContextEmbedderTag static pointer. The stop flag is still read exactly.
 #include "env-inl.h"
 #include "node.h"
 #if !defined(_WIN64) || !defined(_M_X64)
@@ -12,6 +14,6 @@ bool qq_a1b_real_environment_stopping(v8::Isolate* isolate) {
   if (isolate == nullptr || !isolate->InContext()) return true;
   v8::HandleScope scope(isolate);
   node::Environment* env =
-      node::Environment::GetCurrent(isolate->GetCurrentContext());
+      node::GetCurrentEnvironment(isolate->GetCurrentContext());
   return env == nullptr || env->is_stopping();
 }
